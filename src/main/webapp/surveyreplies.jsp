@@ -133,10 +133,10 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 			data: JSON.stringify(itemToUpdate),
 			success:function(result){
 				console.log(result);
-				if(result == 'OK'){
+// 				if(result == 'OK'){
 		        	$('#updateSurveyRepliesModal').modal('hide');
 		        	initializeData ();
-				}
+// 				}
 			},
 			headers: {
 			      'Content-Type': 'application/json'
@@ -197,10 +197,10 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 			  data: JSON.stringify(itemToInsert),
 			  success: function (responseText) {
 				  console.log(responseText);
-				  if (responseText==='OK') {					 
+// 				  if (responseText==='OK') {					 
 					  $('#insertSurveyRepliesModal').modal('hide');		
 					  initializeData ();  
-				  }
+// 				  }
 			  },
 			  headers: {
 			      'Content-Type': 'application/json'
