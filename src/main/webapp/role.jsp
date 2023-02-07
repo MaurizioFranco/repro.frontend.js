@@ -39,39 +39,19 @@
         		"description":roleDescriptionToInsert,
         		"level":roleLevelToInsert
         }
-		
-// 		$.ajaxSetup({
-// 		    'beforeSend' : function(xhr) {
-// 		        xhr.overrideMimeType('application/json; charset=utf-8');
-// 		    },
-// 		});
-        
+	
         $.ajax({
-			  type: "POST",
-			  url: rolesBackendApplicationPath,
-// 			  data: itemToInsert,
-			  data: JSON.stringify(itemToInsert),
-			  success: function (responseText) {
-				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#insertRoleModal').modal('hide');		
-					  initializeData ();
-				  }
-			  },
-			  
-// 			  contentType: 'application/json',
-		        
-// 		        headers: { 'Access-Control-Allow-Origin': '*' },
-// 		        dataType: 'json',
-			  headers: {
-// 			      'Accept': 'application/json',
-			      'Content-Type': 'application/json'
-// 			      'Access-Control-Allow-Origin': '*',			      
-// 		          'Access-Control-Allow-Credentials' : true
-			    }
-// 			    ,
-// 			  dataType: 'json'
-			});
+		  type: "POST",
+		  url: rolesBackendApplicationPath,
+		  data: JSON.stringify(itemToInsert),
+		  success: function (data, textStatus, jqXHR) {
+			  $('#insertRoleModal').modal('hide');	
+		      initializeData ();
+		  },
+		  headers: {
+		      'Content-Type': 'application/json'
+		    }
+		});
 	}
     
 
@@ -112,7 +92,7 @@
 			  initializeUpdateForm (role);
 		    }
 		  var id= document.querySelector('input[name="id"]:checked').value;
-		  xhttp.open("GET", rolesBackendApplicationPath+"/id="+id, true);
+		  xhttp.open("GET", rolesBackendApplicationPath+"/"+id, true);
 		  xhttp.send();
 	}
 	
@@ -145,18 +125,17 @@
         }
         
         $.ajax({
-			  type: "PUT",
-			  url: rolesBackendApplicationPath,
-			  data: itemToUpdate,
-			  success: function (responseText) {
-				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#updateRoleModal').modal('hide');	
-					  initializeData ();					  
-				  }
-			  },
-			  dataType: "text"
-			});
+  		  type: "PUT",
+  		  url: rolesBackendApplicationPath,
+  		  data: JSON.stringify(itemToUpdate),
+  		  success: function (data, textStatus, jqXHR) {
+  			  $('#updateRoleModal').modal('hide');	
+  		      initializeData ();
+  		  },
+  		  headers: {
+  		      'Content-Type': 'application/json'
+  		    }
+  		});
 
 	}
 	
