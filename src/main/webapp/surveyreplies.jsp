@@ -92,7 +92,7 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 			  initializeUpdateForm (surveyReplies);
 		    }
 		  var id = document.querySelector('input[name="id"]:checked').value;
-		  xhttp.open("GET", surveyReplisBackendApplicationPath+"/id=" + id +"", true);
+		  xhttp.open("GET", surveyReplisBackendApplicationPath+"/" + id +"", true);
 		  xhttp.send();
 	}
 	
@@ -120,17 +120,17 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 		
 		var itemToUpdate = {
 		"id":idToUpdate,
-		"survey_id":survey_IdToUpdate,
-		"user_id":user_IdToUpdate,
-		"answers":answersToUpdate,
-		"pdffilename":pdfFileNameToUpdate,
+		"surveyId":survey_IdToUpdate,
+		"userId":user_IdToUpdate,
+		"answer":answersToUpdate,
+		"pdfFileName":pdfFileNameToUpdate,
 		"points":pointsToUpdate
 		}
 		
 		$.ajax({
 			type:"PUT",
 			url: surveyReplisBackendApplicationPath,
-			data:itemToUpdate,
+			data: JSON.stringify(itemToUpdate),
 			success:function(result){
 				console.log(result);
 				if(result == 'OK'){
@@ -138,7 +138,9 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 		        	initializeData ();
 				}
 			},
-			dataType:"text"
+			headers: {
+			      'Content-Type': 'application/json'
+			    }
 		});
 
 	}
