@@ -53,6 +53,7 @@
 	//SHOW UPDATE MODAL
 	function showUpdateSurveysQuestionsModal () {
 		console.log("showUpdateSurveysQuestionsModal!!!");
+		console.log(rolesBackendApplicationPath);
 		const xhttp = new XMLHttpRequest();
 		  xhttp.onload = function() {
 			  console.log(this.responseText);
@@ -60,8 +61,9 @@
 			  console.log(surveyQuestions);
 			  initializeUpdateForm (surveyQuestions);
 		    }
-		  var id= document.querySelector('input[name="sqId"]:checked').value;
-		  xhttp.open("GET", rolesBackendApplicationPath/"id", true);
+		  var id= document.querySelector('input[name="id"]:checked').value;
+		  console.log(rolesBackendApplicationPath+""+id);
+		  xhttp.open("GET", rolesBackendApplicationPath+"/"+id, true);
 		  xhttp.send();
 	}
 	
@@ -92,25 +94,45 @@
 				"questionId":questionIdToUpdate,
 				"position":positionToUpdate
 				}
-	
-		$.ajax({
-			type:"PUT",
-			url: rolesBackendApplicationPath,
-			data:itemToUpdate,
-			success:function(result){
-				console.log(result);
-				if(result == 'OK'){
-		        	$('#updateSurveysQuestionsModal').modal('hide');
-		        	initializeData ();
-				}else{
-					result = 'KO';
-					$('#errorUpdateMessage').show();
-					$('#errorUpdateMessage').html(result);
-				}
-			},
-			dataType:"text"
-		});
+		
+        $.ajax({
+			  type: "PUT",
+			  url: rolesBackendApplicationPath,
+			  data: JSON.stringify(itemToUpdate),
+			  success: function (responseText) {
+				  console.log("responseText " + responseText);
+// 				  if (responseText==='OK') {					 
+					  $('#updateSurveysQuestionsModal').modal('hide');		
+					  initializeData ();					  
+// 				  }
+			  },
+			  headers: {
+			      'Content-Type': 'application/json'
+			    }
+
+			});
 	}
+	
+// 	VECCHIO METODO
+
+// 		$.ajax({
+// 			type:"PUT",
+// 			url: rolesBackendApplicationPath,
+// 			data: JSON.stringify(itemToInsert),
+// 			success:function(result){
+// 				console.log(result);
+// 				if(result == 'OK'){
+// 		        	$('#updateSurveysQuestionsModal').modal('hide');
+// 		        	initializeData ();
+// 				}else{
+// 					result = 'KO';
+// 					$('#errorUpdateMessage').show();
+// 					$('#errorUpdateMessage').html(result);
+// 				}
+// 			},
+// 			dataType:"text"
+// 		});
+// 	}
 	
 	//INSERT FUNCTION
 	function insert () {
@@ -129,19 +151,18 @@
         $.ajax({
 			  type: "POST",
 			  url: rolesBackendApplicationPath,
-			  data: itemToInsert,
+			  data: JSON.stringify(itemToInsert),
 			  success: function (responseText) {
-				  console.log(responseText);
-				  if (responseText==='OK') {					 
+				  console.log("responseText " + responseText);
+// 				  if (responseText==='OK') {					 
 					  $('#insertSurveyQuestionModal').modal('hide');		
-					  initializeData ();
-// 					  $('#errorUpdateMessage').show();
-// 					  $('#errorUpdateMessage').html(responseText);
-// 				  } else {
-					  
-				  }
+					  initializeData ();					  
+// 				  }
 			  },
-			  dataType: "text"
+			  headers: {
+			      'Content-Type': 'application/json'
+			    }
+
 			});
 	}
 	
