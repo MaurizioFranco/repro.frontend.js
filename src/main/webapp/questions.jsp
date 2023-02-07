@@ -137,6 +137,7 @@
 				  type: "POST",
 				  url: pathBackend,
 				  data: itemToInsert,
+				  contentType: 'application/json; charset=utf-8',
 				  success: function (responseText) {
 					  console.log(responseText);
 					  if (responseText==='OK') {					 
@@ -144,7 +145,7 @@
 						  initializeData ();
 					  }
 				  },
-				  dataType: "text"
+				  dataType: "json"
 				});
 		}
 		
