@@ -23,6 +23,57 @@
 <script type="text/javascript">
 
     var rolesBackendApplicationPath = backendPath+"roles";
+    
+  //INSERT FUNCTION
+	function insert () {
+		console.log("insert - START");
+		
+		var roleLabelToInsert = $("#roleLabelToInsert").val();
+		var roleDescriptionToInsert = $("#roleDescriptionToInsert").val();
+		var roleLevelToInsert = $("#roleLevelToInsert").val();
+		
+		console.log("roleLabelToInsert: " + roleLabelToInsert + " - roleDescriptionToInsert: " + roleDescriptionToInsert + " - roleLevelToInsert: " + roleLevelToInsert);
+		
+		var itemToInsert = {
+        		"label":roleLabelToInsert,
+        		"description":roleDescriptionToInsert,
+        		"level":roleLevelToInsert
+        }
+		
+// 		$.ajaxSetup({
+// 		    'beforeSend' : function(xhr) {
+// 		        xhr.overrideMimeType('application/json; charset=utf-8');
+// 		    },
+// 		});
+        
+        $.ajax({
+			  type: "POST",
+			  url: rolesBackendApplicationPath,
+// 			  data: itemToInsert,
+			  data: JSON.stringify(itemToInsert),
+			  success: function (responseText) {
+				  console.log(responseText);
+				  if (responseText==='OK') {					 
+					  $('#insertRoleModal').modal('hide');		
+					  initializeData ();
+				  }
+			  },
+			  
+// 			  contentType: 'application/json',
+		        
+// 		        headers: { 'Access-Control-Allow-Origin': '*' },
+// 		        dataType: 'json',
+			  headers: {
+// 			      'Accept': 'application/json',
+			      'Content-Type': 'application/json'
+// 			      'Access-Control-Allow-Origin': '*',			      
+// 		          'Access-Control-Allow-Credentials' : true
+			    }
+// 			    ,
+// 			  dataType: 'json'
+			});
+	}
+    
 
 	function abilitaBottone() {
 		console.log("questa è la console");
@@ -135,38 +186,7 @@
 
 	}	
 	
-	//INSERT FUNCTION
-	function insert () {
-		console.log("insert - START");
-		
-		var roleLabelToInsert = $("#roleLabelToInsert").val();
-		var roleDescriptionToInsert = $("#roleDescriptionToInsert").val();
-		var roleLevelToInsert = $("#roleLevelToInsert").val();
-		
-		console.log("roleLabelToInsert: " + roleLabelToInsert + " - roleDescriptionToInsert: " + roleDescriptionToInsert + " - roleLevelToInsert: " + roleLevelToInsert);
-		
-		var itemToInsert = {
-        		"label":roleLabelToInsert,
-        		"description":roleDescriptionToInsert,
-        		"level":roleLevelToInsert
-        }
-        
-        $.ajax({
-			  type: "POST",
-			  url: rolesBackendApplicationPath,
-			  data: itemToInsert,
-			  success: function (responseText) {
-				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#insertRoleModal').modal('hide');		
-					  initializeData ();
-				  }
-			  },
-			  headers: { 'Access-Control-Allow-Origin': '*' },
-			  dataType: "json",
-			  contentType: 'application/json'
-			});
-	}
+	
 	
 	
 	//load remote data
