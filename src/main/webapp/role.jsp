@@ -162,7 +162,9 @@
 					  initializeData ();
 				  }
 			  },
-			  dataType: "text"
+			  headers: { 'Access-Control-Allow-Origin': '*' },
+			  dataType: "json",
+			  contentType: 'application/json'
 			});
 	}
 	
