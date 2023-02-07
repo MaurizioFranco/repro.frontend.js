@@ -182,10 +182,10 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 		console.log("survey_IdToInsert: " + survey_IdToInsert + " - user_IdToInsert: " + user_IdToInsert + " - answersToInsert: " + answersToInsert);
 		
 		var itemToInsert = {
-				"survey_id":survey_IdToInsert,
-				"user_id":user_IdToInsert,
-				"answers":answersToInsert,
-				"pdffilename":pdfFileNameToInsert,
+				"surveyId":survey_IdToInsert,
+				"userId":user_IdToInsert,
+				"answer":answersToInsert,
+				"pdfFileName":pdfFileNameToInsert,
 				"points":pointsToInsert
         }
         
