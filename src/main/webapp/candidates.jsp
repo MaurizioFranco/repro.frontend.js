@@ -20,8 +20,7 @@
 
 <script type="text/javascript">
 
-	var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/candidates";
-    //var candidatesBackendApplicationPath = backendPath+"candidates";
+    var candidatesBackendApplicationPath = backendPath+"candidates";
 
 	function abilitaBottone() {
 		console.log("questa è la console");
