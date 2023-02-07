@@ -192,7 +192,7 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
         $.ajax({
 			  type: "POST",
 			  url: surveyReplisBackendApplicationPath,
-			  data: itemToInsert,
+			  data: JSON.stringify(itemToInsert),
 			  success: function (responseText) {
 				  console.log(responseText);
 				  if (responseText==='OK') {					 
@@ -200,7 +200,9 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 					  initializeData ();  
 				  }
 			  },
-			  dataType: "text"
+			  headers: {
+			      'Content-Type': 'application/json'
+			    }
 			});
 	}
 		
