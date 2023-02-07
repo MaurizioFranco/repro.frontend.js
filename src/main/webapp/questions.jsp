@@ -73,7 +73,7 @@
 				  initializeUpdateForm (item);
 			    }
 			  var id = document.querySelector('input[name="id"]:checked').value;
-			  xhttp.open("GET", pathBackend + "/id="+id, true);
+			  xhttp.open("GET", pathBackend + "/" + id, true);
 			  xhttp.send();
 		}
 			
@@ -106,17 +106,19 @@
 			$.ajax({
 				type:"PUT",
 				url: pathBackend,
-				data:itemToUpdate,
+				data: JSON.stringify(itemToUpdate),
 				success:function(result){
 					console.log(result);
-					if(result == 'OK'){
+// 					if(result == 'OK'){
 			        	$('#updateQuestionModal').modal('hide');
 			        	initializeData ();
-					}else{
+// 					}else{
 						
-					}
+// 					}
 				},
-				dataType:"text"
+				headers: {
+				     'Content-Type': 'application/json'
+				  }
 			});
 		}
 		
@@ -136,16 +138,18 @@
 	        $.ajax({
 				  type: "POST",
 				  url: pathBackend,
-				  data: itemToInsert,
-				  contentType: 'application/json; charset=utf-8',
+				  data: JSON.stringify(itemToInsert),
 				  success: function (responseText) {
 					  console.log(responseText);
-					  if (responseText==='OK') {					 
+// 					  if (responseText==='OK') {
+						  console.log("all interno dell if");
 						  $('#insertQuestionModal').modal('hide');		
 						  initializeData ();
-					  }
+// 					  }
 				  },
-				  dataType: "json"
+				  headers: {
+				     'Content-Type': 'application/json'
+				  }
 				});
 		}
 		
@@ -161,16 +165,18 @@
 	        
 	        $.ajax({
 				  type: "DELETE",
-				  url: pathBackend,
-				  data: itemToDelete,
+				  url: pathBackend + "/" + idToDelete,
+				  data: JSON.stringify(itemToDelete),
 				  success: function (responseText) {
 					  console.log(responseText);
-					  if (responseText==='OK') {					 
+// 					  if (responseText==='OK') {					 
 						  $('#deleteQuestionModal').modal('hide');	
 						  initializeData ();					  
-					  }
-				  },
-				  dataType: "text"
+// 					  }
+				  }
+				  ,headers: {
+					  'Content-Type': 'application/json'
+				  }
 				});
 
 		}	
