@@ -42,7 +42,6 @@
 	function initializeInsertForm (item) {
 		console.log("initializeInsertForm - START - " + item);
 		console.log(item);
-		document.getElementById("candidateIdToInsert").value = item.id;
 		document.getElementById("candidateUser_idToInsert").value = item.user_id;
 		document.getElementById("candidateCourse_codeToInsert").value = item.course_code;
 		document.getElementById("candidateCandidacy_date_timeToInsert").value = item.candidacy_date_time;
@@ -152,16 +151,11 @@
         $.ajax({
 			  type: "POST",
 			  url: candidatesBackendApplicationPath,
- 			  data: itemToInsert,
 			  data: JSON.stringify(itemToInsert),
-			  success: function (responseText) {
-				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#insertCandidateModal').modal('hide');		
-					  initializeData ();
-				  }
+			  success: function (data, textStatus, jqXHR) {				 
+				  $('#insertCandidateModal').modal('hide');		
+			  	  initializeData ();
 			  },
-			  
 			  headers: {
 			      'Content-Type': 'application/json'
 			    }
@@ -264,7 +258,7 @@
 		  		<input type="text" name="candidateCourse_codeToUpdate" id="candidateCourse_codeToUpdate" value=""><br>
 			
 		  		<label>Candidacy_date_time</label><br>
-		  		<input type="number" name="candidateCandidacy_date_timeToUpdate" id="candidateCandidacy_date_timeToUpdate" value=""><br>		  		
+		  		<input type="text" name="candidateCandidacy_date_timeToUpdate" id="candidateCandidacy_date_timeToUpdate" value=""><br>		  		
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -317,7 +311,7 @@
 		  		<input type="text" name="candidateCourse_codeToInsert" id="candidateCourse_codeToInsert" value=""><br>
 			
 		  		<label>Candidacy_date_time</label><br>
-		  		<input type="number" name="candidateCandidacy_date_timeToInsert" id="candidateCandidacy_date_timeToInsert" value=""><br>		  		
+		  		<input type="text" name="candidateCandidacy_date_timeToInsert" id="candidateCandidacy_date_timeToInsert" value=""><br>		  		
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
