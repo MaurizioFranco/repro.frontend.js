@@ -47,10 +47,14 @@ if(request.getAttribute("loginMessage") != null){
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="./js/env.js"></script>
+<script src="./js/common.js"></script>
 
 <script type="text/javascript">
 
-var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
+	var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
+	updateMessageOK = "SurveyReplies correttamente modificato";
+	insertMessageOK = "SurveyReplies correttamente inserito";
+	deleteMessageOK = "SurveyReplies correttamente eliminato";
 
 	function abilitaBottone() {
 		console.log("questa � una stampa di console");
@@ -135,6 +139,7 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 				console.log(result);
 // 				if(result == 'OK'){
 		        	$('#updateSurveyRepliesModal').modal('hide');
+		        	showAlertDialog(updateMessageOK);
 		        	initializeData ();
 // 				}
 			},
@@ -146,7 +151,7 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 	}
 	
 	//DELETE FUNCTION
-	function deleteSurveyReplies () {
+	function deleteItem () {
 		console.log("deleteSurveyReplies - START");
 		var idToDelete= document.querySelector('input[name="id"]:checked').value;
 		console.log("idToDelete: " + idToDelete);
@@ -157,14 +162,15 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
         
         $.ajax({
 			  type: "DELETE",
-			  url: surveyReplisBackendApplicationPath,
-			  data: itemToDelete,
+			  url: surveyReplisBackendApplicationPath+"/"+idToDelete,
+// 			  data: itemToDelete,
 			  success: function (responseText) {
-				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#deleteSurveyRepliesModal').modal('hide');	
+// 				  console.log(responseText);
+// 				  if (responseText==='OK') {					 
+					  $('#deleteItemModal').modal('hide');
+					  showAlertDialog(deleteMessageOK);
 					  initializeData ();					  
-				  }
+// 				  }
 			  },
 			  dataType: "text"
 			});
@@ -198,7 +204,8 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 			  success: function (responseText) {
 				  console.log(responseText);
 // 				  if (responseText==='OK') {					 
-					  $('#insertSurveyRepliesModal').modal('hide');		
+					  $('#insertSurveyRepliesModal').modal('hide');	
+					  showAlertDialog(insertMessageOK);
 					  initializeData ();  
 // 				  }
 			  },
@@ -269,6 +276,8 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 	<%@include file="./header.jsp"%>
 <body>
 <div class="container-fluid">
+<div class="alert alert-success" role="alert" id="successAlert">A simple success alert with</div>
+<div class="alert alert-danger" role="alert" id="dangerAlert">A simple danger alert with </div>
 	<h1 style="text-align: left;">Survey Replies List</h1>
 	<!-- Button trigger Insert Modal -->
 	<div style="text-align: right;"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertSurveyRepliesModal"
@@ -281,7 +290,7 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 	<form id="formSelezioneSurveyreplies">	
 		<div id="tableData">	    
 		</div>		
-		<button type="button" id="deleteButton"  class="btn btn-danger"  data-toggle="modal" data-target="#deleteSurveyRepliesModal" disabled>ELIMINA</button>
+		<button type="button" id="deleteButton"  class="btn btn-danger"  data-toggle="modal" data-target="#deleteItemModal" disabled>ELIMINA</button>
 		<button type="button" id="modificaButton" class="btn btn-primary" data-toggle="modal" data-target="#updateSurveyRepliesModal" disabled onclick="showUpdateSurveyRepliesModal(); return false;">MODIFICA</button>
 
 
@@ -333,7 +342,7 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
 </div>
 
 <!-- Modal delete-->
-<div class="modal" id=deleteSurveyRepliesModal tabindex="-1" role="dialog">
+<div class="modal" id=deleteItemModal tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -346,7 +355,7 @@ var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
         <p>Sei sicuro di volre rimuovere questo Survey Replies</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="javascript:deleteSurveyReplies();">SI</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:deleteItem();">SI</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
       </div>
     </div>
