@@ -22,11 +22,11 @@
 
     var candidatesBackendApplicationPath = backendPath+"candidates";
 
-	function abilitaBottone() {
-		console.log("questa è la console");
- 		document.getElementById("deleteButton").disabled = false;
- 		document.getElementById("updateButton").disabled = false;
-	}
+//	function abilitaBottone() {
+//		console.log("questa è la console");
+// 		document.getElementById("deleteButton").disabled = false;
+// 		document.getElementById("updateButton").disabled = false;
+//	}
 	
 	//INITIALIZE UPDATE FORM
 	function initializeUpdateForm (item) {
@@ -42,6 +42,7 @@
 	function initializeInsertForm (item) {
 		console.log("initializeInsertForm - START - " + item);
 		console.log(item);
+		document.getElementById("candidateIdToInsert").value = item.id;
 		document.getElementById("candidateUser_idToInsert").value = item.user_id;
 		document.getElementById("candidateCourse_codeToInsert").value = item.course_code;
 		document.getElementById("candidateCandidacy_date_timeToInsert").value = item.candidacy_date_time;
@@ -93,15 +94,14 @@
         $.ajax({
 			  type: "PUT",
 			  url: candidatesBackendApplicationPath,
-			  data: itemToUpdate,
-			  success: function (responseText) {
-				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#updateCandidateModal').modal('hide');	
-					  initializeData ();					  
-				  }
+			  data: JSON.stringify(itemToUpdate),
+			  success: function (data, textStatus, jqXHR) {			 
+				  $('#updateCandidateModal').modal('hide');	
+			      initializeData ();					  
 			  },
-			  dataType: "text"
+			  headers: {
+	  		      'Content-Type': 'application/json'
+	  		    }
 			});
 
 	}
@@ -120,14 +120,13 @@
 			  type: "DELETE",
 			  url: candidatesBackendApplicationPath,
 			  data: itemToDelete,
-			  success: function (responseText) {
-				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#deleteCandidateModal').modal('hide');	
-					  initializeData ();					  
-				  }
+			  success: function (data, textStatus, jqXHR) {				 
+				  $('#deleteCandidateModal').modal('hide');	
+				  initializeData ();					  
 			  },
-			  dataType: "text"
+			  headers: {
+	  		      'Content-Type': 'application/json'
+	  		    }
 			});
 
 	}	
