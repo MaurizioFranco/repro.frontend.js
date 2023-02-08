@@ -18,7 +18,7 @@
 
 <script type="text/javascript">
 
-    var rolesBackendApplicationPath = backendPath+"roles";
+    backendApplicationPath = backendApplicationPath+"roles";
     
     insertMessageOK = "ruolo correttamente inserito";
     updateMessageOK = "ruolo correttamente modificato";
@@ -42,7 +42,7 @@
 	
         $.ajax({
 		  type: "POST",
-		  url: rolesBackendApplicationPath,
+		  url: backendApplicationPath,
 		  data: JSON.stringify(itemToInsert),
 		  success: function (data, textStatus, jqXHR) {
 			  $('#insertRoleModal').modal('hide');	
@@ -93,7 +93,7 @@
 			  initializeUpdateForm (role);
 		    }
 		  var id= document.querySelector('input[name="id"]:checked').value;
-		  xhttp.open("GET", rolesBackendApplicationPath+"/"+id, true);
+		  xhttp.open("GET", backendApplicationPath+"/"+id, true);
 		  xhttp.send();
 	}
 	
@@ -127,7 +127,7 @@
         
         $.ajax({
   		  type: "PUT",
-  		  url: rolesBackendApplicationPath,
+  		  url: backendApplicationPath,
   		  data: JSON.stringify(itemToUpdate),
   		  success: function (data, textStatus, jqXHR) {
   			  $('#updateRoleModal').modal('hide');
@@ -153,7 +153,7 @@
         
         $.ajax({
 			  type: "DELETE",
-			  url: rolesBackendApplicationPath+"/"+idToDelete,
+			  url: backendApplicationPath+"/"+idToDelete,
 // 			  data: itemToDelete,
 			  success: function (responseText) {
 // 				  console.log(responseText);
@@ -168,25 +168,6 @@
 			});
 
 	}	
-	
-	
-	
-	
-	//load remote data
-	function initializeData () {
-		console.log("initializeData - START");
-		document.getElementById("tableData").innerHTML = "<img src='./img/loader/loading.gif' />" ;
-		
-		const xhttp = new XMLHttpRequest();
-	    xhttp.onload = function() {
-		  console.log(this.responseText);
-		  var items = JSON.parse(this.responseText) ;
-		  console.log(items);
-		  initializeTable (items);
-	    }
-	    xhttp.open("GET", rolesBackendApplicationPath, true);
-	    xhttp.send();
-	}
 	
 	function initializeTable (items) {
 		if (items != null) {
