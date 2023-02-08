@@ -29,10 +29,15 @@
 <link rel="icon" type="image/ico" href="./img/Logo-Centauri-Academy-2018.ico">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="./js/env.js"></script>
+<script src="./js/common.js"></script>
 <script type="text/javascript">
 // 			alert("sono qui");
 			
 			var pathBackend = backendPath + "question";
+			
+			insertMessageOK = "Question correttamente inserita";
+		    updateMessageOK = "Question correttamente modificata";
+		    deleteMessageOK = "Question correttamente eliminata";
 			
 			function abilitaButton(){
 				console.log("Questa � la funzione");
@@ -111,6 +116,7 @@
 					console.log(result);
 // 					if(result == 'OK'){
 			        	$('#updateQuestionModal').modal('hide');
+			        	showAlertDialog(updateMessageOK);	
 			        	initializeData ();
 // 					}else{
 						
@@ -142,8 +148,8 @@
 				  success: function (responseText) {
 					  console.log(responseText);
 // 					  if (responseText==='OK') {
-						  console.log("all interno dell if");
 						  $('#insertQuestionModal').modal('hide');		
+						  showAlertDialog(insertMessageOK);	
 						  initializeData ();
 // 					  }
 				  },
@@ -154,23 +160,24 @@
 		}
 		
 		//DELETE FUNCTION
-		function deleteQuestion() {
-			console.log("deleteQuestions - START");
+		function deleteItem() {
+			console.log("deleteItems - START");
 			var idToDelete= document.querySelector('input[name="id"]:checked').value;
 			console.log("idToDelete: " + idToDelete);
 
-	        var itemToDelete = {
-	        		"id":idToDelete
-	        }
+// 	        var itemToDelete = {
+// 	        		"id":idToDelete
+// 	        }
 	        
 	        $.ajax({
 				  type: "DELETE",
 				  url: pathBackend + "/" + idToDelete,
-				  data: JSON.stringify(itemToDelete),
+// 				  data: JSON.stringify(itemToDelete),
 				  success: function (responseText) {
 					  console.log(responseText);
-// 					  if (responseText==='OK') {					 
-						  $('#deleteQuestionModal').modal('hide');	
+// 					  if (responseText==='OK') {
+						  $('#deleteItemModal').modal('hide');
+						  showAlertDialog(deleteMessageOK);	
 						  initializeData ();					  
 // 					  }
 				  }
@@ -269,6 +276,12 @@
 <%@include file="header.jsp"%>
 				
 	<div class="container-fluid">
+		<div class="alert alert-success" role="alert" id="successAlert">
+		  A simple success alert—check it out!
+		</div>
+		<div class="alert alert-danger" role="alert" id="dangerAlert">
+		  A simple danger alert—check it out!
+		</div>
 	<h1 style="text-align: left;">Questions List</h1>
 	<!-- Button trigger Insert Modal -->
 	<div style="text-align: right;">
@@ -281,7 +294,7 @@
 		    
 			</div>
 
-			<button type="button" class="btn btn-danger" id="deleteButton" disabled data-toggle="modal" data-target="#deleteQuestionModal">Cancella</button>
+			<button type="button" class="btn btn-danger" id="deleteButton" disabled data-toggle="modal" data-target="#deleteItemModal">Cancella</button>
 			<button type="button" class="btn btn-primary" id="modifyButton" disabled data-toggle="modal" data-target="#updateQuestionModal" onclick="showUpdateQuestionModal(); return false;">MODIFICA</button>
 	
 	</form>
@@ -324,7 +337,7 @@
 		</div>
 		
 		<!-- Modal DELETE-->
-		<div class="modal fade" id="deleteQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+		<div class="modal fade" id="deleteItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -337,7 +350,7 @@
 		        <p>Sei sicuro di volre rimuovere questa Question?</p>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-primary" onclick="javascript:deleteQuestion();">SI</button>
+		        <button type="button" class="btn btn-primary" onclick="javascript:deleteItem();">SI</button>
 		        <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
 		      </div>
 		    </div>
