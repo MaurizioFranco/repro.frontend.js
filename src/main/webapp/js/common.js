@@ -77,3 +77,30 @@ function insertItem (itemToInsert) {
 		    }
 		});
 }
+
+//SHOW UPDATE MODAL
+function showUpdateModal () {
+	console.log("showUpdateModal!!!");
+	const xhttp = new XMLHttpRequest();
+	  xhttp.onload = function() {
+		  console.log(this.responseText);
+		  var role = JSON.parse(this.responseText) ;
+		  console.log(role);
+		  initializeUpdateForm (role);
+	    }
+	  var id= document.querySelector('input[name="id"]:checked').value;
+	  xhttp.open("GET", backendApplicationPath+"/"+id, true);
+	  xhttp.send();
+}
+
+//SHOW INSERT MODAL
+function showInsertModal () {
+	console.log("showInsertModal!!!");
+	const xhttp = new XMLHttpRequest();
+	  xhttp.onload = function() {
+		  console.log(this.responseText);
+		  var role = JSON.parse(this.responseText) ;
+		  console.log(role);
+		  initializeInsertForm (role);
+	    }
+}

@@ -70,33 +70,6 @@
 		document.getElementById("roleLevelToInsert").value = item.level;
 	}
 	
-	//SHOW UPDATE MODAL
-	function showUpdateRoleModal () {
-		console.log("showUpdateRoleModal!!!");
-		const xhttp = new XMLHttpRequest();
-		  xhttp.onload = function() {
-			  console.log(this.responseText);
-			  var role = JSON.parse(this.responseText) ;
-			  console.log(role);
-			  initializeUpdateForm (role);
-		    }
-		  var id= document.querySelector('input[name="id"]:checked').value;
-		  xhttp.open("GET", backendApplicationPath+"/"+id, true);
-		  xhttp.send();
-	}
-	
-	//SHOW INSERT MODAL
-	function showInsertRoleModal () {
-		console.log("showInsertRoleModal!!!");
-		const xhttp = new XMLHttpRequest();
-		  xhttp.onload = function() {
-			  console.log(this.responseText);
-			  var role = JSON.parse(this.responseText) ;
-			  console.log(role);
-			  initializeInsertForm (role);
-		    }
-	}
-	
 	//UPDATE FUNCTION
 	function update () {
 		console.log("update - START");
@@ -168,12 +141,12 @@
 		<h1 style="text-align: left;">Roles List</h1>
 		<!-- Button trigger Insert Modal -->
 		<div style="text-align: right;"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertRoleModal"
-		onclick="showInsertRoleModal(); return false;">+</button></div>
+		onclick="showInsertModal(); return false;">+</button></div>
 		<br>
 		<form id="formSelectRole">		
 			<div id="tableData"></div>		
 			<button type="button" class="btn btn-danger"  id="deleteButton" disabled data-toggle="modal" data-target="#deleteItemModal">Cancella</button>
-	        <button type="button" class="btn btn-primary" id="updateButton" data-toggle="modal"  data-target="#updateModal" onclick="showUpdateRoleModal(); return false;">MODIFICA</button>
+	        <button type="button" class="btn btn-primary" id="updateButton" data-toggle="modal"  data-target="#updateModal" onclick="showUpdateModal(); return false;">MODIFICA</button>
 		</form>
     </div>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
