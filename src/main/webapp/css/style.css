@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+
+#successAlert{
+	display:none;
+/* 	position: absolute; */
+/* 	width: 99%; */
+/* 	bottom: 1px; */
+/* 	transition-delay: 2s; */
+}
+
+#dangerAlert{
+	display:none;
+}
