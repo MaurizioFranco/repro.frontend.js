@@ -86,34 +86,6 @@
 
 	}
 	
-	//DELETE FUNCTION
-	function deleteItem () {
-		console.log("deleteItem - START");
-		var idToDelete= document.querySelector('input[name="id"]:checked').value;
-		console.log("idToDelete: " + idToDelete);
-
-//         var itemToDelete = {
-//         		"id":idToDelete
-//         }
-        
-        $.ajax({
-			  type: "DELETE",
-			  url: backendApplicationPath+"/"+idToDelete,
-// 			  data: itemToDelete,
-			  success: function (responseText) {
-// 				  console.log(responseText);
-// 				  if (responseText==='OK') {					 
-					  $('#deleteItemModal').modal('hide');	
-					  
-					  showAlertDialog(deleteMessageOK);
-					  initializeData ();					  
-// 				  }
-			  },
-			  dataType: "text"
-			});
-
-	}
-	
 	//INSERT FUNCTION
 	function insert () {
 		console.log("insert - START");
@@ -199,12 +171,12 @@
 	<h1 style="text-align: left;">Candidates List</h1>
 	<!-- Button trigger Insert Modal -->
 	<div style="text-align: right;"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertModal"
-	onclick="showInsertCandidateModal(); return false;">+</button></div>
+	onclick="showInsertModal(); return false;">+</button></div>
 	<br>
 	<form id="formSelectCandidate">		
 		<div id="tableData"></div>		
-		<button type="button" class="btn btn-danger"  id="deleteButton" disabled data-toggle="modal" data-target="#deleteCandidateModal">Cancella</button>
-        <button type="button" class="btn btn-primary" id="updateButton" data-toggle="modal"  data-target="#updateModal" onclick="showUpdateCandidateModal(); return false;">MODIFICA</button>
+		<button type="button" class="btn btn-danger"  id="deleteButton" disabled data-toggle="modal" data-target="#deleteItemModal">Cancella</button>
+        <button type="button" class="btn btn-primary" id="updateButton" data-toggle="modal"  data-target="#updateModal" onclick="showUpdateModal(); return false;">MODIFICA</button>
 	</form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -246,7 +218,7 @@
 
 
 <!-- Modal delete-->
-<div class="modal fade" id="deleteCandidateModal" tabindex="-1" candidate="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="deleteItemModal" tabindex="-1" candidate="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
  <div class="modal-dialog" candidate="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -259,7 +231,7 @@
         <p>Sei sicuro di voler rimuovere questo candidato?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="javascript:deleteCandidate();">SI</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:deleteItem();">SI</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
       </div>
     </div>
