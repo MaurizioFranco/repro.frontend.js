@@ -68,7 +68,7 @@ function insertItem (itemToInsert) {
 		  url: backendApplicationPath,
 		  data: JSON.stringify(itemToInsert),
 		  success: function (data, textStatus, jqXHR) {
-			  $('#insertRoleModal').modal('hide');	
+			  $('#insertModal').modal('hide');	
 			  showAlertDialog(insertMessageOK);
 		      initializeData ();
 		  },
