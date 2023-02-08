@@ -28,3 +28,52 @@ function initializeData () {
     xhttp.open("GET", backendApplicationPath, true);
     xhttp.send();
 }
+
+//DELETE FUNCTION
+function deleteItem () {
+	console.log("deleteItem - START");
+	var idToDelete= document.querySelector('input[name="id"]:checked').value;
+	console.log("idToDelete: " + idToDelete);
+    $.ajax({
+	  type: "DELETE",
+	  url: backendApplicationPath+"/"+idToDelete,
+	  success: function (responseText) {
+			  $('#deleteItemModal').modal('hide');	
+			  showAlertDialog(deleteMessageOK);
+			  initializeData ();					  
+	  },
+	  dataType: "text"
+	});
+}	
+
+function updateItem (itemToUpdate) {
+    $.ajax({
+	  type: "PUT",
+	  url: backendApplicationPath,
+	  data: JSON.stringify(itemToUpdate),
+	  success: function (data, textStatus, jqXHR) {
+		  $('#updateModal').modal('hide');
+		  showAlertDialog(updateMessageOK);
+	      initializeData ();
+	  },
+	  headers: {
+	      'Content-Type': 'application/json'
+	    }
+	});
+}
+
+function insertItem (itemToInsert) {
+        $.ajax({
+		  type: "POST",
+		  url: backendApplicationPath,
+		  data: JSON.stringify(itemToInsert),
+		  success: function (data, textStatus, jqXHR) {
+			  $('#insertRoleModal').modal('hide');	
+			  showAlertDialog(insertMessageOK);
+		      initializeData ();
+		  },
+		  headers: {
+		      'Content-Type': 'application/json'
+		    }
+		});
+}

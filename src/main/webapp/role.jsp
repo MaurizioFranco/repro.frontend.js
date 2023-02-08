@@ -40,19 +40,7 @@
         		"level":roleLevelToInsert
         }
 	
-        $.ajax({
-		  type: "POST",
-		  url: backendApplicationPath,
-		  data: JSON.stringify(itemToInsert),
-		  success: function (data, textStatus, jqXHR) {
-			  $('#insertRoleModal').modal('hide');	
-			  showAlertDialog(insertMessageOK);
-		      initializeData ();
-		  },
-		  headers: {
-		      'Content-Type': 'application/json'
-		    }
-		});
+		insertItem (itemToInsert) ;
 	}
     
 
@@ -125,49 +113,8 @@
         		"level":roleLevelToUpdate
         }
         
-        $.ajax({
-  		  type: "PUT",
-  		  url: backendApplicationPath,
-  		  data: JSON.stringify(itemToUpdate),
-  		  success: function (data, textStatus, jqXHR) {
-  			  $('#updateRoleModal').modal('hide');
-  			  showAlertDialog(updateMessageOK);
-  		      initializeData ();
-  		  },
-  		  headers: {
-  		      'Content-Type': 'application/json'
-  		    }
-  		});
-
+        updateItem (itemToUpdate) ;
 	}
-	
-	//DELETE FUNCTION
-	function deleteItem () {
-		console.log("deleteItem - START");
-		var idToDelete= document.querySelector('input[name="id"]:checked').value;
-		console.log("idToDelete: " + idToDelete);
-
-//         var itemToDelete = {
-//         		"id":idToDelete
-//         }
-        
-        $.ajax({
-			  type: "DELETE",
-			  url: backendApplicationPath+"/"+idToDelete,
-// 			  data: itemToDelete,
-			  success: function (responseText) {
-// 				  console.log(responseText);
-// 				  if (responseText==='OK') {					 
-					  $('#deleteItemModal').modal('hide');	
-					  
-					  showAlertDialog(deleteMessageOK);
-					  initializeData ();					  
-// 				  }
-			  },
-			  dataType: "text"
-			});
-
-	}	
 	
 	function initializeTable (items) {
 		if (items != null) {
@@ -226,14 +173,14 @@
 		<form id="formSelectRole">		
 			<div id="tableData"></div>		
 			<button type="button" class="btn btn-danger"  id="deleteButton" disabled data-toggle="modal" data-target="#deleteItemModal">Cancella</button>
-	        <button type="button" class="btn btn-primary" id="updateButton" data-toggle="modal"  data-target="#updateRoleModal" onclick="showUpdateRoleModal(); return false;">MODIFICA</button>
+	        <button type="button" class="btn btn-primary" id="updateButton" data-toggle="modal"  data-target="#updateModal" onclick="showUpdateRoleModal(); return false;">MODIFICA</button>
 		</form>
     </div>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 
 <!-- Update Modal -->
-<div class="modal fade" id="updateRoleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
