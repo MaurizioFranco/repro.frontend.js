@@ -51,13 +51,13 @@ if(request.getAttribute("loginMessage") != null){
 
 <script type="text/javascript">
 
-	var surveyReplisBackendApplicationPath = backendPath+"surveyreplies";
+	backendApplicationPath = backendApplicationPath + "surveyreplies";
 	updateMessageOK = "SurveyReplies correttamente modificato";
 	insertMessageOK = "SurveyReplies correttamente inserito";
 	deleteMessageOK = "SurveyReplies correttamente eliminato";
 
 	function abilitaBottone() {
-		console.log("questa ï¿½ una stampa di console");
+		console.log("questa è una stampa di console");
 		document.getElementById("deleteButton").disabled=false;
 		document.getElementById("modificaButton").disabled=false;
 	}
@@ -85,33 +85,6 @@ if(request.getAttribute("loginMessage") != null){
 		document.getElementById("pointsToInsert").value = item.points;
 	}
 	
-	//SHOW UPDATE MODAL
-	function showUpdateSurveyRepliesModal(){
-		console.log("showUpdateSurveyRepliesModal!!!");
-		const xhttp = new XMLHttpRequest();
-		  xhttp.onload = function() {
-			  console.log(this.responseText);
-			  var surveyReplies = JSON.parse(this.responseText) ;
-			  console.log(surveyReplies);
-			  initializeUpdateForm (surveyReplies);
-		    }
-		  var id = document.querySelector('input[name="id"]:checked').value;
-		  xhttp.open("GET", surveyReplisBackendApplicationPath+"/" + id +"", true);
-		  xhttp.send();
-	}
-	
-	//SHOW INSERT MODAL
-	function showInsertSurveyRepliesModal () {
-		console.log("showInsertSurveryRepliesModal!!!");
-		const xhttp = new XMLHttpRequest();
-		  xhttp.onload = function() {
-			  console.log(this.responseText);
-			  var surveyReplies = JSON.parse(this.responseText) ;
-			  console.log(surveyReplies);
-			  initializeInsertForm (role);
-		    }
-	}
-	
 	//UPDATE FUNCTION
 	function update(){
 		console.log("update - START");
@@ -131,51 +104,8 @@ if(request.getAttribute("loginMessage") != null){
 		"points":pointsToUpdate
 		}
 		
-		$.ajax({
-			type:"PUT",
-			url: surveyReplisBackendApplicationPath,
-			data: JSON.stringify(itemToUpdate),
-			success:function(result){
-				console.log(result);
-// 				if(result == 'OK'){
-		        	$('#updateSurveyRepliesModal').modal('hide');
-		        	showAlertDialog(updateMessageOK);
-		        	initializeData ();
-// 				}
-			},
-			headers: {
-			      'Content-Type': 'application/json'
-			    }
-		});
-
+		updateItem (itemToUpdate) ;
 	}
-	
-	//DELETE FUNCTION
-	function deleteItem () {
-		console.log("deleteSurveyReplies - START");
-		var idToDelete= document.querySelector('input[name="id"]:checked').value;
-		console.log("idToDelete: " + idToDelete);
-
-        var itemToDelete = {
-        		"id":idToDelete
-        }
-        
-        $.ajax({
-			  type: "DELETE",
-			  url: surveyReplisBackendApplicationPath+"/"+idToDelete,
-// 			  data: itemToDelete,
-			  success: function (responseText) {
-// 				  console.log(responseText);
-// 				  if (responseText==='OK') {					 
-					  $('#deleteItemModal').modal('hide');
-					  showAlertDialog(deleteMessageOK);
-					  initializeData ();					  
-// 				  }
-			  },
-			  dataType: "text"
-			});
-
-	}	
 	
 	//INSERT FUNCTION
 	function insert () {
@@ -196,23 +126,8 @@ if(request.getAttribute("loginMessage") != null){
 				"pdfFileName":pdfFileNameToInsert,
 				"points":pointsToInsert
         }
-        
-        $.ajax({
-			  type: "POST",
-			  url: surveyReplisBackendApplicationPath,
-			  data: JSON.stringify(itemToInsert),
-			  success: function (responseText) {
-				  console.log(responseText);
-// 				  if (responseText==='OK') {					 
-					  $('#insertSurveyRepliesModal').modal('hide');	
-					  showAlertDialog(insertMessageOK);
-					  initializeData ();  
-// 				  }
-			  },
-			  headers: {
-			      'Content-Type': 'application/json'
-			    }
-			});
+		
+		insertItem (itemToInsert) ;
 	}
 		
 		//load remote data
@@ -227,7 +142,7 @@ if(request.getAttribute("loginMessage") != null){
 			  console.log(items);
 			  initializeTable (items);
 		    }
-		    xhttp.open("GET", surveyReplisBackendApplicationPath, true);
+		    xhttp.open("GET", backendApplicationPath, true);
 		    xhttp.send();
 		}
 		
@@ -280,8 +195,8 @@ if(request.getAttribute("loginMessage") != null){
 <div class="alert alert-danger" role="alert" id="dangerAlert">A simple danger alert with </div>
 	<h1 style="text-align: left;">Survey Replies List</h1>
 	<!-- Button trigger Insert Modal -->
-	<div style="text-align: right;"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertSurveyRepliesModal"
-	onclick="showInsertSurveyRepliesModal(); return false;">+</button></div>
+	<div style="text-align: right;"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertModal"
+	onclick="showInsertModal(); return false;">+</button></div>
 	<br>
 	<h3 style="text-align:center;"><%= surveyRepliesEliminato%></h3>
 	<h3 style="text-align:center;"><%= surveyRepliesModificato%></h3>
@@ -291,7 +206,7 @@ if(request.getAttribute("loginMessage") != null){
 		<div id="tableData">	    
 		</div>		
 		<button type="button" id="deleteButton"  class="btn btn-danger"  data-toggle="modal" data-target="#deleteItemModal" disabled>ELIMINA</button>
-		<button type="button" id="modificaButton" class="btn btn-primary" data-toggle="modal" data-target="#updateSurveyRepliesModal" disabled onclick="showUpdateSurveyRepliesModal(); return false;">MODIFICA</button>
+		<button type="button" id="modificaButton" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" disabled onclick="showUpdateModal(); return false;">MODIFICA</button>
 
 
 	</form>
@@ -300,7 +215,7 @@ if(request.getAttribute("loginMessage") != null){
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 
 <!-- Update Modal -->
-<div class="modal fade" id="updateSurveyRepliesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -363,7 +278,7 @@ if(request.getAttribute("loginMessage") != null){
 </div>
 
 <!-- Insert Modal -->
-<div class="modal fade" id="insertSurveyRepliesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="insertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
