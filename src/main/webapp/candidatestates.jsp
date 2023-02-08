@@ -17,17 +17,18 @@
 
 <script type="text/javascript">
 
-var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/candidateState";
+var candidateStatesBackendApplicationPath = backendPath+"candidatestate";
+
 
 	function abilitaBottone() {
 		console.log("questa è la console");
- 		document.getElementById("buttonDelete").disabled = false;
- 		document.getElementById("buttonUpdate").disabled = false;
+ 		document.getElementById("deleteButton").disabled = false;
+ 		document.getElementById("updateButton").disabled = false;
 	}
 	
 	function initializeUpdateForm (item) {
 		console.log("initializeUpdateForm - START - " + item);
-		console.log(item);
+		console.log(item.role_id);
 		document.getElementById("idToUpdate").value = item.id;
 		document.getElementById("roleIdToUpdate").value = item.role_id;
 		document.getElementById("statusCodeToUpdate").value = item.status_code;
@@ -54,31 +55,29 @@ var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/ca
 		  xhttp.onload = function() {
 			  console.log(this.responseText);
 			  var candidateState = JSON.parse(this.responseText) ;
-			  console.log(candidateState);
-			  initializeUpdateForm (CandidateState);
+			  console.log('candidate state : '+ candidateState);
+			  initializeUpdateForm (candidateState);
 		    }
-		  var id= document.querySelector('input[name="candidateStatesRadioId"]:checked').value;
-		  xhttp.open("GET", "http://localhost:8080/repro.admin.web/GetRoleServlet?id="+id, true);
+		  var id= document.querySelector('input[name="id"]:checked').value;
+		  xhttp.open("GET", candidateStatesBackendApplicationPath + "/" +id, true);
 		  xhttp.send();
 	}
 	
-	function showInsertCandidateStatesModal() {
+	function showInsertCandidateStatesModal () {
 		console.log("showInsertCandidateStatesModal!!!");
 		const xhttp = new XMLHttpRequest();
 		  xhttp.onload = function() {
 			  console.log(this.responseText);
-			  var role = JSON.parse(this.responseText) ;
-			  console.log(candidateState);
-			  initializeinsertForm (CandidateState);
+			  var candidateStates = JSON.parse(this.responseText) ;
+			  console.log(candidateStates+"er puponeeee");
+			  initializeInsertForm (CandidateStates);
 		    }
-		  var id= document.querySelector('input[name="roleRadioId"]:checked').value;
-		  xhttp.open("GET", "http://localhost:8080/repro.admin.web/GetCandidateStatesServlet?id="+id, true);
-		  xhttp.send();
 	}
 	
 	function update () {
 		console.log("update - START");
 		console.log(" prova id " + document.getElementById("idToUpdate").value);
+		console.log(" prova role id " + document.getElementById("roleIdToUpdate").value);
 		var idToUpdate = document.getElementById("idToUpdate").value ; 
 		var statusRoleIdToUpdate = document.getElementById("roleIdToUpdate").value ; 
 		var statusCodeToUpdate = document.getElementById("statusCodeToUpdate").value ; 
@@ -86,11 +85,11 @@ var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/ca
 		var statusDescriptionToUpdate = document.getElementById("statusDescriptionToUpdate").value ; 
 		var statusColorToUpdate = document.getElementById("statusColorToUpdate").value ; 
 		
-		console.log("idToUpdate: " + idToUpdate + " - roleIdToUpdate: " + roleIdToUpdate + " - statusCodeToUpdate: " + statusCodeToUpdate + " - statusLabelToUpdate: " + statusLabelToUpdate + "statusDescriptionToUpdate" + statusDescriptionToUpdate + "statusColorToUpdate" + statusColorToUpdate);
+		console.log("idToUpdate: " + idToUpdate + " - roleIdToUpdate: " + statusRoleIdToUpdate + " - statusCodeToUpdate: " + statusCodeToUpdate + " - statusLabelToUpdate: " + statusLabelToUpdate + " - statusDescriptionToUpdate: " + statusDescriptionToUpdate + " - statusColorToUpdate: " + statusColorToUpdate);
 		
         var itemToUpdate = {
         		"id":idToUpdate,
-        		"role_id":roleIdToUpdate,
+        		"role_id":statusRoleIdToUpdate,
         		"status_code":statusCodeToUpdate,
         		"status_label":statusLabelToUpdate,
         		"status_desciption":statusDescriptionToUpdate,
@@ -99,12 +98,12 @@ var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/ca
         
         $.ajax({
 			  type: "POST",
-			  url: "http://localhost:8080/repro.admin.web/UpdateCandidateStatesServlet",
+			  url: candidateStatesBackendApplicationPath,
 			  data: itemToUpdate,
 			  success: function (responseText) {
 				  console.log(responseText);
 				  if (responseText==='OK') {					 
-					  $('#updateRoleModal').modal('hide');		
+					  $('#updateCandidateStatesModal').modal('hide');		
 					  location.reload();
 // 					  $('#errorUpdateMessage').show();
 // 					  $('#errorUpdateMessage').html(responseText);
@@ -119,12 +118,18 @@ var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/ca
 	
 	function insert () {
 		console.log("insert - START");
-			
+		var idToInsert = document.getElementById("idToInsert").value ; 
+		var statusRoleIdToInsert = document.getElementById("roleIdToInsert").value ; 
+		var statusCodeToInsert = document.getElementById("statusCodeToInsert").value ; 
+		var statusLabelToInsert = document.getElementById("statusLabelToInsert").value ; 
+		var statusDescriptionToInsert = document.getElementById("statusDescriptionToInsert").value ; 
+		var statusColorToInsert = document.getElementById("statusColorToInsert").value ; 
+	
 		console.log("idToInsert: " + idToInsert + " - roleIdToInsert: " + roleIdToInsert + " - statusCodeToInsert: " + statusCodeToInsert + " - statusLabelToInsert: " + statusLabelToInsert + "statusDescriptionToInsert" + statusDescriptionToInsert + "statusColorToInsert" + statusColorToInsert);
 		
 		var itemToInsert = {
 				"id":idToInsert,
-				"role_id":roleIdToInsert,
+				"role_id":statusRoleIdToInsert,
 				"status_code":statusCodeToInsert,
 				"status_label":statusLabelToInsert,
 				"status_desciption":statusDescriptionToInsert,
@@ -204,16 +209,15 @@ var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/ca
 				dynamicTableContent += "<tr><td colspan='5'>NON CI SONO CANDIDATESTATES</td></tr>" ;
 			} else {
 				for (var i=0; i<items.length; i++) {
-					dynamicTableContent += "<tr><td scope='col'><input type='radio' name='id' onclick='javascript:abilitaBottone();' value='" + items[i].id + "' /></td>" ;
+					dynamicTableContent += "<tr><td scope='col'><input type='radio' name='id' id='candidateStatesRadioId' onclick='javascript:abilitaBottone();' value='" + items[i].id + "' /></td>" ;
 					dynamicTableContent += "<td>" + items[i].id + "</td>" ;
 					dynamicTableContent += "<td>" + items[i].role_id + "</td>" ;
 					dynamicTableContent += "<td>" + items[i].status_code + "</td>" ;
 					dynamicTableContent += "<td>" + items[i].status_label + "</td>" ;
-					dynamicTableContent += "<td>" + items[i].status_description + "</td></tr>" ;
+					dynamicTableContent += "<td>" + items[i].status_description + "</td>" ;
 					dynamicTableContent += "<td>" + items[i].status_color + "</td></tr>" ;
-					
-}
-			}
+					}
+				}
 			
 			dynamicTableContent += "</table>" ;
 			document.getElementById("tableData").innerHTML = dynamicTableContent ;
@@ -239,22 +243,22 @@ var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/ca
 <body>
 	<%@include file="header.jsp"%>
 	<div class="container-fluid">
-		<h1 style="text-align: left;">CandidateSates List</h1>
+		<h1 style="text-align: left;">Candidate States List</h1>
 		<!-- Button trigger Insert Modal -->
 		<div style="text-align: right;">
 			<button type="button" class="btn btn-primary" data-toggle="modal"
-				data-target="#insertCandidateSatesModal"
+				data-target="#InsertCandidateStatesModal"
 				onclick="showInsertCandidateStatesModal(); return false;">+</button>
 		</div>
 		<br>
-		<form id="formSelectRole">
+		<form id="formSelectCandidateStates">
 			<div id="tableData"></div>
 			<button type="button" class="btn btn-danger" id="deleteButton"
 				disabled data-toggle="modal"
-				data-target="#deleteCadnidateStatesModal">Cancella</button>
+				data-target="#deleteCandidateStatesModal">Cancella</button>
 			<button type="button" class="btn btn-primary" id="updateButton"
 				data-toggle="modal" data-target="#updateCandidateStatesModal"
-				onclick="showUpdateCadnidateStatesModal(); return false;">MODIFICA</button>
+				onclick="showUpdateCandidateStatesModal(); return false;">MODIFICA</button>
 		</form>
 	</div>
 	<script
@@ -279,7 +283,7 @@ var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/ca
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form id="updateRoleForm">
+				<form id="updateCandidateStatesForm">
 					<div class="modal-body">
 
 						<label>ID</label><br> <input type="number" name="idToUpdate"
@@ -333,7 +337,7 @@ var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/ca
 	</div>
 
 	<!-- Insert Modal -->
-	<div class="modal fade" id="insertRoleModal" tabindex="-1"
+	<div class="modal fade" id="insertCandidateStatesModal" tabindex="-1"
 		role="dialog" aria-labelledby="exampleModalLongTitle"
 		aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -346,9 +350,12 @@ var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/ca
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form id="insertRoleForm">
+				<form id="insertCandidateStatesForm">
 					<div class="modal-body">
 
+						<label>Id</label><br> <input type="text"
+							name="IdToInsert" id="IdToInsert" value=""><br>
+						
 						<label>RoleId</label><br> <input type="text"
 							name="roleIdToInsert" id="roleIdToInsert" value=""><br>
 
@@ -360,7 +367,9 @@ var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/ca
 
 						<label>Status Description</label><br> <input type="text"
 							name="statusDescriptionToInsert" id="statusDescriptionToInsert"
-							value=""><br> <label>Status Color</label><br> <input
+							value=""><br>
+							
+						<label>Status Color</label><br> <input
 							type="text" name="statusColorToInsert" id="statusColorToInsert"
 							value=""><br>
 
@@ -378,7 +387,7 @@ var candidateStatesBackendApplicationPath = "http://localhost:9000/repro.rest/ca
 	</div>
 
 </body>
-</html>
 <script>
 initializeData();
 </script>
+</html>
