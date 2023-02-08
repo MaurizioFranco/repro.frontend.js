@@ -29,10 +29,15 @@
 <link rel="icon" type="image/ico" href="./img/Logo-Centauri-Academy-2018.ico">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="./js/env.js"></script>
+<script src="./js/common.js"></script>
 <script type="text/javascript">
 // 			alert("sono qui");
 			
-			var pathBackend = backendPath + "question";
+			var backendApplicationPath = backendApplicationPath + "question";
+			
+			insertMessageOK = "Question correttamente inserita";
+		    updateMessageOK = "Question correttamente modificata";
+		    deleteMessageOK = "Question correttamente eliminata";
 			
 			function abilitaButton(){
 				console.log("Questa � la funzione");
@@ -43,7 +48,7 @@
 			
 			function modifyQuestion(){
 				console.log("modifica");
-				showUpdateQuestionModal();
+				showUpdateModal();
 			}		
 
 			function initializeUpdateForm (item) {
@@ -62,32 +67,6 @@
 				document.getElementById("questionLabelToUpdate").value = item.label;
 				document.getElementById("questionDescriptionToUpdate").value = item.description;
 			}
-			
-			//SHOW UPDATE MODAL
-			function showUpdateQuestionModal () {
-			console.log("showUpdateQuestionModal!!!");
-			const xhttp = new XMLHttpRequest();
-			  xhttp.onload = function() {
-				  var item = JSON.parse(this.responseText) ;
-				  console.log(item);
-				  initializeUpdateForm (item);
-			    }
-			  var id = document.querySelector('input[name="id"]:checked').value;
-			  xhttp.open("GET", pathBackend + "/" + id, true);
-			  xhttp.send();
-		}
-			
-			//SHOW INSERT MODAL
-			function showInsertQuestionModal () {
-			console.log("showInsertQuestionModal!!!");
-			const xhttp = new XMLHttpRequest();
-			xhttp.onload = function() {
-				console.log(this.responseText);
-				var question = JSON.parse(this.responseText) ;
-				console.log(question);
-				initializeInsertForm (question);
-		    	}
-			}
 
 		//UPDATE FUNCTION
 		function update() {
@@ -98,28 +77,12 @@
 			console.log(idToUpdate,questionLabelToUpdate,questionDescriptionToUpdate);
 			
 			var itemToUpdate = {
-			"id":idToUpdate,
-			"label":questionLabelToUpdate,
-			"description":questionDescriptionToUpdate
+				"id":idToUpdate,
+				"label":questionLabelToUpdate,
+				"description":questionDescriptionToUpdate
 			}
 			
-			$.ajax({
-				type:"PUT",
-				url: pathBackend,
-				data: JSON.stringify(itemToUpdate),
-				success:function(result){
-					console.log(result);
-// 					if(result == 'OK'){
-			        	$('#updateQuestionModal').modal('hide');
-			        	initializeData ();
-// 					}else{
-						
-// 					}
-				},
-				headers: {
-				     'Content-Type': 'application/json'
-				  }
-			});
+			updateItem (itemToUpdate);
 		}
 		
 		//INSERT FUNCTION
@@ -135,66 +98,7 @@
 					"description":questionDescriptionToInsert
 	        }
 	        
-	        $.ajax({
-				  type: "POST",
-				  url: pathBackend,
-				  data: JSON.stringify(itemToInsert),
-				  success: function (responseText) {
-					  console.log(responseText);
-// 					  if (responseText==='OK') {
-						  console.log("all interno dell if");
-						  $('#insertQuestionModal').modal('hide');		
-						  initializeData ();
-// 					  }
-				  },
-				  headers: {
-				     'Content-Type': 'application/json'
-				  }
-				});
-		}
-		
-		//DELETE FUNCTION
-		function deleteQuestion() {
-			console.log("deleteQuestions - START");
-			var idToDelete= document.querySelector('input[name="id"]:checked').value;
-			console.log("idToDelete: " + idToDelete);
-
-	        var itemToDelete = {
-	        		"id":idToDelete
-	        }
-	        
-	        $.ajax({
-				  type: "DELETE",
-				  url: pathBackend + "/" + idToDelete,
-				  data: JSON.stringify(itemToDelete),
-				  success: function (responseText) {
-					  console.log(responseText);
-// 					  if (responseText==='OK') {					 
-						  $('#deleteQuestionModal').modal('hide');	
-						  initializeData ();					  
-// 					  }
-				  }
-				  ,headers: {
-					  'Content-Type': 'application/json'
-				  }
-				});
-
-		}	
-		
-		//load remote data
-		function initializeData () {
-			console.log("initializeData - START");
-			document.getElementById("tableData").innerHTML = "<img src='./img/loader/loading.gif' />" ;
-			
-			const xhttp = new XMLHttpRequest();
-		    xhttp.onload = function() {
-			  console.log(this.responseText);
-			  var items = JSON.parse(this.responseText) ;
-			  console.log(items);
-			  initializeTable (items);
-		    }
-		    xhttp.open("GET", pathBackend, true);
-		    xhttp.send();
+			insertItem (itemToInsert);
 		}
 		
 		function initializeTable (items) {
@@ -243,15 +147,15 @@
 						dynamicTableContent += "<td>" + items[i].ansf + "</td>" ;
 						dynamicTableContent += "<td>" + items[i].ansg + "</td>" ;
 						dynamicTableContent += "<td>" + items[i].ansh + "</td>" ;
+						dynamicTableContent += "<td>" + items[i].cansa + "</td>" ;
+						dynamicTableContent += "<td>" + items[i].cansb + "</td>" ;
+						dynamicTableContent += "<td>" + items[i].cansc + "</td>" ;
+						dynamicTableContent += "<td>" + items[i].cansd + "</td>" ;
+						dynamicTableContent += "<td>" + items[i].canse + "</td>" ;
+						dynamicTableContent += "<td>" + items[i].cansf + "</td>" ;
+						dynamicTableContent += "<td>" + items[i].cansg + "</td>" ;
 						dynamicTableContent += "<td>" + items[i].cansh + "</td>" ;
-						dynamicTableContent += "<td>" + items[i].cansh + "</td>" ;
-						dynamicTableContent += "<td>" + items[i].cansh + "</td>" ;
-						dynamicTableContent += "<td>" + items[i].cansh + "</td>" ;
-						dynamicTableContent += "<td>" + items[i].cansh + "</td>" ;
-						dynamicTableContent += "<td>" + items[i].cansh + "</td>" ;
-						dynamicTableContent += "<td>" + items[i].cansh + "</td>" ;
-						dynamicTableContent += "<td>" + items[i].cansh + "</td>" ;
-						dynamicTableContent += "<td>" + items[i].full_answer+ "</td></tr>" ;
+						dynamicTableContent += "<td>" + items[i].full_answer + "</td></tr>" ;
 					}
 				}
 				//
@@ -269,30 +173,32 @@
 <%@include file="header.jsp"%>
 				
 	<div class="container-fluid">
-	<h1 style="text-align: left;">Questions List</h1>
-	<!-- Button trigger Insert Modal -->
-	<div style="text-align: right;">
-		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertQuestionModal" onclick="showInsertQuestionModal(); return false;">+</button>
-	</div>
-	<br>
-	<form id="selectionForm">
-			
-			<div id="tableData">
-		    
-			</div>
-
-			<button type="button" class="btn btn-danger" id="deleteButton" disabled data-toggle="modal" data-target="#deleteQuestionModal">Cancella</button>
-			<button type="button" class="btn btn-primary" id="modifyButton" disabled data-toggle="modal" data-target="#updateQuestionModal" onclick="showUpdateQuestionModal(); return false;">MODIFICA</button>
+		<div class="alert alert-success" role="alert" id="successAlert">
+		  A simple success alert—check it out!
+		</div>
+		<div class="alert alert-danger" role="alert" id="dangerAlert">
+		  A simple danger alert—check it out!
+		</div>
+		<h1 style="text-align: left;">Questions List</h1>
+		<!-- Button trigger Insert Modal -->
+		<div style="text-align: right;">
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertModal" onclick="showInsertModal(); return false;">+</button>
+		</div>
+		<br>
+		<form id="selectionForm">
+				
+				<div id="tableData">
+			    
+				</div>
 	
-	</form>
-		<a href="insertQuestion.jsp">
-			<button type="button" class="btn btn-info" id="insertButton" >Inserisci question</button>
-		</a>
-
+				<button type="button" class="btn btn-danger" id="deleteButton" disabled data-toggle="modal" data-target="#deleteItemModal">Cancella</button>
+				<button type="button" class="btn btn-primary" id="modifyButton" disabled data-toggle="modal" data-target="#updateModal" onclick="showUpdateModal(); return false;">MODIFICA</button>
+		
+		</form>
 	</div>
 			
 	<!-- Modal UPDATE-->
-		<div class="modal fade" id="updateQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+		<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -324,7 +230,7 @@
 		</div>
 		
 		<!-- Modal DELETE-->
-		<div class="modal fade" id="deleteQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+		<div class="modal fade" id="deleteItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -337,7 +243,7 @@
 		        <p>Sei sicuro di volre rimuovere questa Question?</p>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-primary" onclick="javascript:deleteQuestion();">SI</button>
+		        <button type="button" class="btn btn-primary" onclick="javascript:deleteItem();">SI</button>
 		        <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
 		      </div>
 		    </div>
@@ -345,7 +251,7 @@
 		</div>
 	
 	<!-- Insert Modal -->
-	<div class="modal fade" id="insertQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+	<div class="modal fade" id="insertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   		<div class="modal-dialog" role="document">
    			<div class="modal-content">
       			<div class="modal-header">

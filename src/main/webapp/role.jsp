@@ -14,16 +14,16 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="./js/env.js"></script>
-<style>
-
-
-
-</style>
+<script src="./js/common.js"></script>
 
 <script type="text/javascript">
 
-    var rolesBackendApplicationPath = backendPath+"roles";
+    backendApplicationPath = backendApplicationPath+"roles";
     
+    insertMessageOK = "ruolo correttamente inserito";
+    updateMessageOK = "ruolo correttamente modificato";
+    deleteMessageOK = "ruolo correttamente eliminato";
+        
   //INSERT FUNCTION
 	function insert () {
 		console.log("insert - START");
@@ -40,23 +40,12 @@
         		"level":roleLevelToInsert
         }
 	
-        $.ajax({
-		  type: "POST",
-		  url: rolesBackendApplicationPath,
-		  data: JSON.stringify(itemToInsert),
-		  success: function (data, textStatus, jqXHR) {
-			  $('#insertRoleModal').modal('hide');	
-		      initializeData ();
-		  },
-		  headers: {
-		      'Content-Type': 'application/json'
-		    }
-		});
+		insertItem (itemToInsert) ;
 	}
     
 
 	function abilitaBottone() {
-		console.log("questa � la console");
+		console.log("questa è la console");
  		document.getElementById("deleteButton").disabled = false;
  		document.getElementById("updateButton").disabled = false;
 	}
@@ -81,33 +70,6 @@
 		document.getElementById("roleLevelToInsert").value = item.level;
 	}
 	
-	//SHOW UPDATE MODAL
-	function showUpdateRoleModal () {
-		console.log("showUpdateRoleModal!!!");
-		const xhttp = new XMLHttpRequest();
-		  xhttp.onload = function() {
-			  console.log(this.responseText);
-			  var role = JSON.parse(this.responseText) ;
-			  console.log(role);
-			  initializeUpdateForm (role);
-		    }
-		  var id= document.querySelector('input[name="id"]:checked').value;
-		  xhttp.open("GET", rolesBackendApplicationPath+"/"+id, true);
-		  xhttp.send();
-	}
-	
-	//SHOW INSERT MODAL
-	function showInsertRoleModal () {
-		console.log("showInsertRoleModal!!!");
-		const xhttp = new XMLHttpRequest();
-		  xhttp.onload = function() {
-			  console.log(this.responseText);
-			  var role = JSON.parse(this.responseText) ;
-			  console.log(role);
-			  initializeInsertForm (role);
-		    }
-	}
-	
 	//UPDATE FUNCTION
 	function update () {
 		console.log("update - START");
@@ -124,64 +86,7 @@
         		"level":roleLevelToUpdate
         }
         
-        $.ajax({
-  		  type: "PUT",
-  		  url: rolesBackendApplicationPath,
-  		  data: JSON.stringify(itemToUpdate),
-  		  success: function (data, textStatus, jqXHR) {
-  			  $('#updateRoleModal').modal('hide');	
-  		      initializeData ();
-  		  },
-  		  headers: {
-  		      'Content-Type': 'application/json'
-  		    }
-  		});
-
-	}
-	
-	//DELETE FUNCTION
-	function deleteRole () {
-		console.log("deleteRole - START");
-		var idToDelete= document.querySelector('input[name="id"]:checked').value;
-		console.log("idToDelete: " + idToDelete);
-
-        var itemToDelete = {
-        		"id":idToDelete
-        }
-        
-        $.ajax({
-			  type: "DELETE",
-			  url: rolesBackendApplicationPath,
-			  data: itemToDelete,
-			  success: function (responseText) {
-				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#deleteRoleModal').modal('hide');	
-					  initializeData ();					  
-				  }
-			  },
-			  dataType: "text"
-			});
-
-	}	
-	
-	
-	
-	
-	//load remote data
-	function initializeData () {
-		console.log("initializeData - START");
-		document.getElementById("tableData").innerHTML = "<img src='./img/loader/loading.gif' />" ;
-		
-		const xhttp = new XMLHttpRequest();
-	    xhttp.onload = function() {
-		  console.log(this.responseText);
-		  var items = JSON.parse(this.responseText) ;
-		  console.log(items);
-		  initializeTable (items);
-	    }
-	    xhttp.open("GET", rolesBackendApplicationPath, true);
-	    xhttp.send();
+        updateItem (itemToUpdate) ;
 	}
 	
 	function initializeTable (items) {
@@ -225,23 +130,30 @@
 </head>
 <body>
 	<%@include file="header.jsp"%>
-<div class="container-fluid">
-	<h1 style="text-align: left;">Roles List</h1>
-	<!-- Button trigger Insert Modal -->
-	<div style="text-align: right;"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertRoleModal"
-	onclick="showInsertRoleModal(); return false;">+</button></div>
-	<br>
-	<form id="formSelectRole">		
-		<div id="tableData"></div>		
-		<button type="button" class="btn btn-danger"  id="deleteButton" disabled data-toggle="modal" data-target="#deleteRoleModal">Cancella</button>
-        <button type="button" class="btn btn-primary" id="updateButton" data-toggle="modal"  data-target="#updateRoleModal" onclick="showUpdateRoleModal(); return false;">MODIFICA</button>
-	</form>
-</div>
+    <div class="container-fluid">
+	    <div class="alert alert-success" role="alert" id="successAlert">
+		  A simple success alert—check it out!
+		</div>
+		<div class="alert alert-danger" role="alert" id="dangerAlert">
+		  A simple danger alert—check it out!
+		</div>
+		    
+		<h1 style="text-align: left;">Roles List</h1>
+		<!-- Button trigger Insert Modal -->
+		<div style="text-align: right;"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertRoleModal"
+		onclick="showInsertModal(); return false;">+</button></div>
+		<br>
+		<form id="formSelectRole">		
+			<div id="tableData"></div>		
+			<button type="button" class="btn btn-danger"  id="deleteButton" disabled data-toggle="modal" data-target="#deleteItemModal">Cancella</button>
+	        <button type="button" class="btn btn-primary" id="updateButton" data-toggle="modal"  data-target="#updateModal" onclick="showUpdateModal(); return false;">MODIFICA</button>
+		</form>
+    </div>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 
 <!-- Update Modal -->
-<div class="modal fade" id="updateRoleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -276,7 +188,7 @@
 
 
 <!-- Modal delete-->
-<div class="modal fade" id="deleteRoleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="deleteItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -289,7 +201,7 @@
         <p>Sei sicuro di volre rimuovere questo role?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="javascript:deleteRole();">SI</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:deleteItem();">SI</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
       </div>
     </div>
