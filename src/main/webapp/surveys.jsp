@@ -1,5 +1,4 @@
 <%@page import="java.util.List"%>
-
 <%@page import="java.nio.file.attribute.UserPrincipalLookupService"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -13,9 +12,13 @@
 <head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="./js/env.js"></script>
+<script src="./js/common.js"></script>
 <script type="text/javascript">
 
 	var surveysBackendApplicationPath = backendPath+"survey";
+	updateMessageOK = "Survey correttamente modificato";
+	insertMessageOK = "Survey correttamente inserito";
+	deleteMessageOK = "Survey correttamente eliminato";
 
 	function abilitaBottone() {
 		console.log("questa è la console");
@@ -53,7 +56,7 @@
 			  initializeUpdateForm (survey);
 		    }
 		  var id = document.querySelector('input[name="id"]:checked').value;
-		  xhttp.open("GET", surveysBackendApplicationPath+"/id="+id, true);
+		  xhttp.open("GET", surveysBackendApplicationPath+"/"+id, true);
 		  xhttp.send();
 	}
 	
@@ -72,31 +75,34 @@
 	//UPDATE FUNCTION
 	function update() {
 		console.log("update - START");
-		var idToUpdate = document.getElementById("surveyIdToUpdate").value;
-		var labelToUpdate = document.getElementById("surveyLabelToUpdate").value;
-		var timeToUpdate = document.getElementById("surveyTimeToUpdate").value;
-		var descriptionToUpdate = document.getElementById("surveyDescriptionToUpdate").value;
+		var idToUpdate = $("#surveyIdToUpdate").val();
+		var labelToUpdate = $("#surveyLabelToUpdate").val();
+		var timeToUpdate = $("#surveyTimeToUpdate").val();
+		var descriptionToUpdate = $("#surveyDescriptionToUpdate").val();
 		console.log("idToUpdate"+idToUpdate+"labelToUpdate"+labelToUpdate+"timeToUpdate"+timeToUpdate+"descriptionToUpdate"+descriptionToUpdate);
 		
 		var itemToUpdate = {
         		"id":idToUpdate,
-        		"label":surveyLabelToUpdate,
-        		"time":surveyTimeToUpdate,
-        		"description":surveyDescriptionToUpdate
+        		"label":labelToUpdate,
+        		"time":timeToUpdate,
+        		"description":descriptionToUpdate
         }
 		
 		$.ajax({
 			  type: "PUT",
 			  url: surveysBackendApplicationPath,
-			  data: itemToUpdate,
+			  data: JSON.stringify(itemToUpdate),
 			  success: function (responseText) {
 				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#updateSurveyModal').modal('hide');		
+//				  if (responseText==='OK') {					 
+					  $('#updateSurveyModal').modal('hide');
+			          showAlertDialog(updateMessageOK);
 					  initializeData ();
-				  }
+//				  }
 			  },
-			  dataType: "text"
+			  headers: {
+				  'Content-Type': 'application/json'
+			  }
 			});
 	}
 	
@@ -106,20 +112,21 @@
 		var idToDelete= document.querySelector('input[name="id"]:checked').value;
 		console.log("idToDelete: " + idToDelete);
 
-        var itemToDelete = {
-        		"id":idToDelete
-        }
+//         var itemToDelete = {
+//         		"id":idToDelete
+//         }
         
         $.ajax({
 			  type: "DELETE",
-			  url: surveysBackendApplicationPath,
-			  data: itemToDelete,
+			  url: surveysBackendApplicationPath+"/"+idToDelete,
+//			  data: itemToDelete,
 			  success: function (responseText) {
-				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#deleteSurveyModal').modal('hide');	
+//				  console.log(responseText);
+//				  if (responseText==='OK') {					 
+					  $('#deleteSurveyModal').modal('hide');
+        			  showAlertDialog(deleteMessageOK);
 					  initializeData ();					  
-				  }
+//			  }
 			  },
 			  dataType: "text"
 			});
@@ -145,16 +152,19 @@
         $.ajax({
 			  type: "POST",
 			  url: surveysBackendApplicationPath,
-			  data: itemToInsert,
+			  data: JSON.stringify(itemToInsert),
 			  success: function (responseText) {
 				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#insertSurveyModal').modal('hide');		
+//				  if (responseText==='OK') {					 
+					  $('#insertSurveyModal').modal('hide');
+					  showAlertDialog(insertMessageOK);
 					  initializeData ();  
-				  }
+//				  }
 			  },
-			  dataType: "text"
-			});
+			  headers: {
+				  'Content-Type': 'application/json'
+			  }
+		});
 	}
 	
 	//load remote data
@@ -310,7 +320,7 @@
 		  		<input type="text" name="surveyTimeToInsert" id="surveyTimeToInsert" value=""><br>
 			
 		  		<label>Description</label><br>
-		  		<input type="number" name="surveyDescriptionToInsert" id="surveyDescriptionToInsert" value=""><br>		  		
+		  		<input type="text" name="surveyDescriptionToInsert" id="surveyDescriptionToInsert" value=""><br>		  		
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
