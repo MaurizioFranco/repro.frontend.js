@@ -7,14 +7,41 @@
 <html>
 
 <%-- <%@include file="authentication.jsp"%> --%>
-<script src="./js/env.js"></script>
 
 
 <head>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<link rel="icon" href="./img/Logo-Centauri-Academy-2018.ico">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="./js/env.js"></script>
+<script src="./js/common.js"></script>
+
 <script type="text/javascript">
 
-	var rolesBackendApplicationPath = backendPath+"surveyQuestions";
+backendApplicationPath = backendApplicationPath+"surveyQuestions";
+
+insertMessageOK = "surveyquestions correttamente inserito";
+updateMessageOK = "surveyquestions correttamente modificato";
+deleteMessageOK = "surveyquestions correttamente eliminato";
+
+
+//INSERT FUNCTION
+function insert () {
+	console.log("insert - START");
+	var surveyIdToInsert = $("#surveyIdToInsert").val(); 
+	var questionIdToInsert = $("#questionIdToInsert").val(); 
+	var positionToInsert = $("#positionToInsert").val(); 
+	console.log("surveyIdToInsert: " + surveyIdToInsert + " - questionIdToInsert: " + questionIdToInsert + " - positionToInsert: " + positionToInsert);
+	
+	var itemToInsert = {
+			"surveyId":surveyIdToInsert,
+			"questionId":questionIdToInsert,
+			"position":positionToInsert
+			}
+    
+	insertItem (itemToInsert) ;
+}
 
 	function abilitaBottone() {
 		console.log("questa è la console");
@@ -22,13 +49,6 @@
  		document.getElementById("buttonUpdate").disabled = false;
 	}
 	
-// 	function deleteSurveyquestions() {
-// 		console.log("Delete");
-// 		document.getElementById("formSelectSurveyquestions").action = "./DeleteSurveyquestionsServlet";
-// 		document.getElementById("formSelectSurveyquestions").method = "post";
-// 		document.getElementById("formSelectSurveyquestions").submit;
-// // 		location.reload()
-// 	}
 	
 	//INITIALIZE UPDATE FORM
 	function initializeUpdateForm (item) {
@@ -53,7 +73,7 @@
 	//SHOW UPDATE MODAL
 	function showUpdateSurveysQuestionsModal () {
 		console.log("showUpdateSurveysQuestionsModal!!!");
-		console.log(rolesBackendApplicationPath);
+		console.log(backendApplicationPath);
 		const xhttp = new XMLHttpRequest();
 		  xhttp.onload = function() {
 			  console.log(this.responseText);
@@ -62,8 +82,8 @@
 			  initializeUpdateForm (surveyQuestions);
 		    }
 		  var id= document.querySelector('input[name="id"]:checked').value;
-		  console.log(rolesBackendApplicationPath+""+id);
-		  xhttp.open("GET", rolesBackendApplicationPath+"/"+id, true);
+		  console.log(backendApplicationPath+""+id);
+		  xhttp.open("GET", backendApplicationPath+"/"+id, true);
 		  xhttp.send();
 	}
 	
@@ -95,102 +115,8 @@
 				"position":positionToUpdate
 				}
 		
-        $.ajax({
-			  type: "PUT",
-			  url: rolesBackendApplicationPath,
-			  data: JSON.stringify(itemToUpdate),
-			  success: function (responseText) {
-				  console.log("responseText " + responseText);
-// 				  if (responseText==='OK') {					 
-					  $('#updateSurveysQuestionsModal').modal('hide');		
-					  initializeData ();					  
-// 				  }
-			  },
-			  headers: {
-			      'Content-Type': 'application/json'
-			    }
-
-			});
+		updateItem (itemToUpdate) ;
 	}
-	
-// 	VECCHIO METODO
-
-// 		$.ajax({
-// 			type:"PUT",
-// 			url: rolesBackendApplicationPath,
-// 			data: JSON.stringify(itemToInsert),
-// 			success:function(result){
-// 				console.log(result);
-// 				if(result == 'OK'){
-// 		        	$('#updateSurveysQuestionsModal').modal('hide');
-// 		        	initializeData ();
-// 				}else{
-// 					result = 'KO';
-// 					$('#errorUpdateMessage').show();
-// 					$('#errorUpdateMessage').html(result);
-// 				}
-// 			},
-// 			dataType:"text"
-// 		});
-// 	}
-	
-	//INSERT FUNCTION
-	function insert () {
-		console.log("insert - START");
-		var surveyIdToInsert = $("#surveyIdToInsert").val(); 
-		var questionIdToInsert = $("#questionIdToInsert").val(); 
-		var positionToInsert = $("#positionToInsert").val(); 
-		console.log("surveyIdToInsert: " + surveyIdToInsert + " - questionIdToInsert: " + questionIdToInsert + " - positionToInsert: " + positionToInsert);
-		
-		var itemToInsert = {
-				"surveyId":surveyIdToInsert,
-				"questionId":questionIdToInsert,
-				"position":positionToInsert
-				}
-        
-        $.ajax({
-			  type: "POST",
-			  url: rolesBackendApplicationPath,
-			  data: JSON.stringify(itemToInsert),
-			  success: function (responseText) {
-				  console.log("responseText " + responseText);
-// 				  if (responseText==='OK') {					 
-					  $('#insertSurveyQuestionModal').modal('hide');		
-					  initializeData ();					  
-// 				  }
-			  },
-			  headers: {
-			      'Content-Type': 'application/json'
-			    }
-
-			});
-	}
-	
-	//DELETE FUNCTION
-	function deleteSurveyquestions () {
-		console.log("deleteSurveyQuestions - START");
-		var idToDelete= document.querySelector('input[name="id"]:checked').value;
-		console.log("idToDelete: " + idToDelete);
-
-        var itemToDelete = {
-        		"id":idToDelete
-        }
-        
-        $.ajax({
-			  type: "DELETE",
-			  url: rolesBackendApplicationPath,
-			  data: itemToDelete,
-			  success: function (responseText) {
-				  console.log(responseText);
-				  if (responseText==='OK') {					 
-					  $('#deleteRoleModal').modal('hide');	
-					  initializeData ();					  
-				  }
-			  },
-			  dataType: "text"
-			});
-
-	}	
 	
 	//load remote data
 	function initializeData () {
@@ -204,7 +130,7 @@
 		  console.log(items);
 		  initializeTable (items);
 	    }
-	    xhttp.open("GET", rolesBackendApplicationPath, true);
+	    xhttp.open("GET", backendApplicationPath, true);
 	    xhttp.send();
 	}
 	
@@ -252,9 +178,11 @@
 <body>
 	<%@include file="header.jsp"%>
 <div class="container-fluid">
+<div class="alert alert-success" role="alert" id="successAlert"></div>
+<div class="alert alert-danger" role="alert" id="dangerAlert"></div>
 	<h1>Survey Question List</h1>
 	<!-- Button trigger Insert Modal -->
-	<div style="text-align: right;"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertSurveyQuestionModal"
+	<div style="text-align: right;"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertModal"
 	onclick="showInsertSurveysQuestionsModal(); return false;">+</button></div>
 	<br>
 	<form id="formSelectSurveyquestions">
@@ -262,11 +190,12 @@
 		<div id="tableData">
 	   	</div> 	
 
-		<button type="button" id="buttonDelete" class="btn btn-danger" data-toggle="modal" data-target="#deleteSurveysQuestionsModal" disabled>Delete</button>
-		<button type="button" id="buttonUpdate" class="btn btn-primary" data-toggle="modal" data-target="#updateSurveysQuestionsModal" disabled onclick="showUpdateSurveysQuestionsModal(); return false;">Update</button>
+		<button type="button" id="buttonDelete" class="btn btn-danger" data-toggle="modal" data-target="#deleteItemModal" disabled>Delete</button>
+		<button type="button" id="buttonUpdate" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" disabled onclick="showUpdateSurveysQuestionsModal(); return false;">Update</button>
 
+	</form>
 <!--Delete Modal -->
-<div class="modal fade" id="deleteSurveysQuestionsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -280,17 +209,16 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <input class="btn btn-danger" type="submit" value="Confirm" onclick="javascript:deleteSurveyquestions();">
+        <input class="btn btn-danger" type="submit" value="Confirm" onclick="javascript:deleteItem();">
       </div>
     </div>
   </div>
 </div>
-	</form>
 </div>
 
 
 <!-- Update Modal -->
-<div class="modal fade" id="updateSurveysQuestionsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -324,7 +252,7 @@
 </div>
 
 <!-- Insert Modal -->
-<div class="modal fade" id="insertSurveyQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="insertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
