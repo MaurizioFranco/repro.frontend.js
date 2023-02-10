@@ -24,6 +24,31 @@
 	<li class="nav-item dropdown">
 		 <a class="nav-link dropdown-toggle text-white" role="button" data-toggle="dropdown" aria-expanded="false">Admin</a>
 		 <div class="dropdown-menu">
+         	<a class="dropdown-item" id="entityButton" data-toggle="modal" data-target="#insertModal"
+		 	onclick="showInsertModal(); return false;">Roles</a>
+            
+            <a class="dropdown-item" id="entityButton" data-toggle="modal" data-target="#insertModal"
+		    onclick="showInsertModal(); return false;">Users</a>
+          
+            <a class="dropdown-item" id="entityButton" data-toggle="modal" data-target="#insertModal"
+		    onclick="showInsertModal(); return false;">Candidates</a>
+		  
+		    <a class="dropdown-item" id="entityButton" data-toggle="modal" data-target="#insertModal"
+		    onclick="showInsertModal(); return false;">CandidateStates</a>
+		  </div>
+	</li>
+	<li class="nav-item dropdown">
+		 <a class="nav-link dropdown-toggle text-white" role="button" data-toggle="dropdown" aria-expanded="false">Survey</a>
+		 <div class="dropdown-menu">
+          <a class="dropdown-item" href="surveys.jsp">Surveys</a>
+          <a class="dropdown-item" href="surveyreplies.jsp">Survey Replies</a>
+          <a class="dropdown-item" href="surveyquestions.jsp">Survey Questions</a>
+          <a class="dropdown-item" href="questions.jsp">Questions</a>
+		 </div>
+	</li>
+	<li class="nav-item dropdown">
+		 <a class="nav-link dropdown-toggle text-white" role="button" data-toggle="dropdown" aria-expanded="false">Admin (LEGACY)</a>
+		 <div class="dropdown-menu">
           <a class="dropdown-item" href="role.jsp">Roles</a>
           <a class="dropdown-item" href="user.jsp">Users</a>
           <a class="dropdown-item" href="candidates.jsp">Candidates</a>
@@ -31,7 +56,7 @@
 		 </div>
 	</li>
 	<li class="nav-item dropdown">
-		 <a class="nav-link dropdown-toggle text-white" role="button" data-toggle="dropdown" aria-expanded="false">Survey</a>
+		 <a class="nav-link dropdown-toggle text-white" role="button" data-toggle="dropdown" aria-expanded="false">Survey (LEGACY)</a>
 		 <div class="dropdown-menu">
           <a class="dropdown-item" href="surveys.jsp">Surveys</a>
           <a class="dropdown-item" href="surveyreplies.jsp">Survey Replies</a>

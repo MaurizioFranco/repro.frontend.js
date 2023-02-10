@@ -1,7 +1,6 @@
 @charset "UTF-8";
 
-
-#successAlert{
+#successAlert {
 	display:none;
 /* 	position: absolute; */
 /* 	width: 99%; */
@@ -9,6 +8,10 @@
 /* 	transition-delay: 2s; */
 }
 
-#dangerAlert{
+#dangerAlert {
 	display:none;
+}
+
+#entityButton {
+	cursor: pointer;
 }
