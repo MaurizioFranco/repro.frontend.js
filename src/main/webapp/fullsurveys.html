@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+
+<script src="./js/env.js"></script>
+<title>Insert title here</title>
+</head>
+<body>
+<pre id="json"></pre>
+</body>
+</html>
+
+<script>
+	backendApplicationPath = backendApplicationPath + "fullSurveysResource";
+
+	function getData() {
+		console.log("getData - START");
+
+		const xhttp = new XMLHttpRequest();
+		xhttp.onload = function() {
+			console.log(this.responseText);
+			var items = JSON.parse(this.responseText);
+			console.log(items);
+			if (items != null) {
+				document.getElementById("json").textContent = JSON.stringify(items, undefined, 2);
+			}
+		}
+		xhttp.open("GET", backendApplicationPath + "/" + 1, true);
+		xhttp.send();
+	}
+	
+	getData();
+</script>
